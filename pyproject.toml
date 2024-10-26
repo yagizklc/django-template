@@ -1,0 +1,20 @@
+[project]
+name = "dj"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["django>=5.1.2"]
+
+[tool.uv]
+dev-dependencies = [
+    "django-stubs>=5.1.0",
+    "mypy>=1.13.0",
+    "ruff>=0.7.1",
+]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "backend.settings"
