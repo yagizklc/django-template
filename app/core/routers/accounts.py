@@ -1,5 +1,5 @@
-from ninja import Router, Schema, ModelSchema
-from core.models.account import Account
+from ninja import Router, Schema
+from core.models.account import Account, AccountSchema
 from core.utils.auth_backend import JWTAuth
 from django.contrib.auth import authenticate, login as django_login
 import jwt
@@ -8,15 +8,8 @@ from backend.settings import SECRET_KEY
 router = Router(auth=JWTAuth())
 
 
-class AccountSchema(ModelSchema):
-    class Meta:
-        model = Account
-        fields = "__all__"
-
-
 @router.get("/me", response=AccountSchema)
 def account_details(request):
-    print("request.user", request.user)
     return request.auth
 
 

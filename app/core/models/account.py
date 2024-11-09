@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from core.models.organization import Organization
+from ninja import ModelSchema
 
 
 class AccountManager(models.Manager):
@@ -37,3 +38,9 @@ class Account(models.Model):
 
     objects = models.Manager()
     manager = AccountManager()
+
+
+class AccountSchema(ModelSchema):
+    class Meta:
+        model = Account
+        fields = "__all__"
