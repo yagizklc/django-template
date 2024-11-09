@@ -1,6 +1,6 @@
 import json
 from functools import wraps
-from typing import Type
+from typing import Any, Dict, Type
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.http import Http404
 from django.core.exceptions import ValidationError
@@ -33,7 +33,11 @@ def good(view_class: Type[View]) -> Type[View]:
 
             account = get_object_or_404(Account, user=user)
 
-            return original_dispatch(self, request, *args, **kwargs, account=account)
+            data: Dict[str, Any] = json.loads(request.body)
+
+            return original_dispatch(
+                self, request, *args, **kwargs, account=account, data=data
+            )
         except (AssertionError, ValueError, json.JSONDecodeError, ValidationError) as e:
             return JsonResponse({"error": str(e)}, status=400)
         except Http404 as e:

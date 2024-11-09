@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.urls import include, path
-from .api import api
+from django.urls import path
+from core.api import api
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", api.urls),
-    path("legacy/", include("core.urls")),
 ]

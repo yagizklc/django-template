@@ -48,6 +48,7 @@ class JWTAuthenticationBackend(BaseBackend):
 
 
 class JWTAuth(HttpBearer):
+    """ JWT Auth for Django-Ninja """
     def authenticate(self, request, token: str):
         user = django_authenticate(token=token)
         if not user:
