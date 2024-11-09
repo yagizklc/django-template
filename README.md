@@ -6,8 +6,9 @@ Supports: JWT Authentication, OpenAPI, Permission Management
 
 libraries:
 
-- logfire
-- django-ninja
+- logfire: logging + monitoring
+- django-ninja: RESTful APIs
+- django-guardian: Object-level Permissions
 
 ## TODO
 

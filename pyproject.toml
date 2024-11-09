@@ -1,5 +1,5 @@
 [project]
-name = "dj"
+name = "django-ninja-guardian"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,20 +8,17 @@ dependencies = [
     "django-guardian>=2.4.0",
     "django-ninja>=1.3.0",
     "django>=5.1.2",
-    "elasticsearch>=8.15.1",
     "logfire[django]>=2.1.2",
     "pyjwt>=2.9.0",
 ]
 
 [tool.uv]
-dev-dependencies = [
-    "django-stubs>=5.1.0",
-    "mypy>=1.13.0",
-    "ruff>=0.7.1",
-]
+dev-dependencies = ["django-stubs>=5.1.0", "mypy>=1.13.0", "ruff>=0.7.1"]
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
+mypy_path = "$PYTHONPATH:./app"
+explicit_package_bases = true
 
 [tool.django-stubs]
 django_settings_module = "backend.settings"
