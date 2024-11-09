@@ -1,25 +1,39 @@
 import json
 from functools import wraps
 from typing import Type
-from django.http import JsonResponse, HttpRequest
+from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.http import Http404
 from django.core.exceptions import ValidationError
 from django.views import View
+from django.contrib.auth import authenticate
+from core.models.account import Account
+from django.shortcuts import get_object_or_404
 
 
-def handle_exceptions(view_class: Type[View]) -> Type[View]:
+def good(view_class: Type[View]) -> Type[View]:
     """
     Class decorator to handle exceptions and return a JSON response for all view methods.
     """
     original_dispatch = view_class.dispatch
-    assert isinstance(
-        original_dispatch, JsonResponse
-    ), "View class must be a subclass of django.views.View"
+    assert issubclass(view_class, View), "Class must be a subclass of View."
 
     @wraps(original_dispatch)
-    def new_dispatch(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+    def new_dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         try:
-            return original_dispatch(self, request, *args, **kwargs)
+            authorization = request.headers.get("Authorization", "")
+            if not authorization or len(authorization.split()) != 2:
+                raise ValidationError("Invalid Authorization header")
+
+            # authenticate using token
+            # checkout utils/auth_backend.py for implementation
+            token = authorization.split()[1]
+            user = authenticate(token=token)
+            if not user:
+                raise ValidationError("Invalid token")
+
+            account = get_object_or_404(Account, user=user)
+
+            return original_dispatch(self, request, *args, **kwargs, account=account)
         except (AssertionError, ValueError, json.JSONDecodeError, ValidationError) as e:
             return JsonResponse({"error": str(e)}, status=400)
         except Http404 as e:

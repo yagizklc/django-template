@@ -1,6 +1,11 @@
 from django.urls import path
-from app.core.views import accounts
+from core.views import accounts
+from ninja import NinjaAPI
+
+api = NinjaAPI(csrf=True)
+
 
 urlpatterns = [
-    path("me/", accounts.MeView.as_view(), name="me"),
+    path("login/", accounts.LoginView.as_view(), name="login"),
+    path("register/", accounts.RegisterView.as_view(), name="register"),
 ]
